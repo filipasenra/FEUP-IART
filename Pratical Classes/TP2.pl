@@ -94,15 +94,16 @@ uc([(G, [E | Cam]) | R], Sol) :-
     uc(L2ord, Sol).
 
 /* Greedy 
-start_state(Ei), h(Ei, Hi), greedy([(Hi, 0, [Ei])], Sol).      
-Infinite loop!                 
+start_state(Ei), h(Ei, Hi), greedy([(Hi, 0, [Ei])], Sol).
+
+To not go into cycles add\ \+ member
 */
 greedy([(_, _, [E | Cam]) | _], [E | Cam]) :-
     goal_state(E).
 
 greedy([(_, G, [E | Cam]) | R], Sol) :-
     findall((H2, G2, [E2 | [E | Cam]]), 
-    (operator(E, E2, C), h(E2, H2), G2 is G + C), 
+    (operator(E, E2, C), \+ member(E2, [E | Cam]), h(E2, H2), G2 is G + C), 
     LS),
 
     append(R, LS, L2),
